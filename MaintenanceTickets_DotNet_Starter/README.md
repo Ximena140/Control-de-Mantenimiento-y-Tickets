@@ -123,3 +123,6 @@ The entities have no navigation properties, so API responses never contain cycle
 ALTER TABLE dbo.Tickets DROP CONSTRAINT CK_Tickets_Status;
 ALTER TABLE dbo.Tickets ADD CONSTRAINT CK_Tickets_Status CHECK (Status IN ('PENDING','IN_PROGRESS','RESOLVED'));
 ```
+
+## Deployment
+See [DEPLOYMENT.md](DEPLOYMENT.md) for deploying the database, API and frontend on Railway.
