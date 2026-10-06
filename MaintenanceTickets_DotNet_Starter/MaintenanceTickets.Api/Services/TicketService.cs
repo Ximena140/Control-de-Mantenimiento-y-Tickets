@@ -21,7 +21,7 @@ public class TicketService : ITicketService
     public Task<Ticket> CreateAsync(CreateTicketDto dto)
     {
         var priority = dto.Priority.Trim().ToUpperInvariant();
-        if (priority is not ("LOW" or "MEDIUM" or "HIGH" or "CRITICAL"))
+        if (!TicketPriority.All.Contains(priority))
             throw new BusinessRuleException("Priority must be LOW, MEDIUM, HIGH or CRITICAL.");
 
         var ticket = new Ticket
@@ -30,13 +30,13 @@ public class TicketService : ITicketService
             AssetCode = dto.AssetCode.Trim(),
             Description = dto.Description?.Trim(),
             Priority = priority,
-            Status = "PENDING",
+            Status = TicketStatus.Pending,
             ReportedBy = dto.ReportedBy.Trim(),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
 
-        return _repository.CreateAsync(ticket, dto.ReportedBy.Trim());
+        return _repository.CreateAsync(ticket);
     }
 
     public async Task<Ticket?> ChangeStatusAsync(int id, ChangeStatusDto dto)
@@ -45,21 +45,13 @@ public class TicketService : ITicketService
         if (ticket is null) return null;
 
         var newStatus = dto.NewStatus.Trim().ToUpperInvariant();
-        var allowed = ticket.Status switch
-        {
-            "PENDING" => newStatus == "IN_PROGRESS",
-            "IN_PROGRESS" => newStatus == "RESOLVED",
-            "RESOLVED" => newStatus == "CLOSED",
-            _ => false
-        };
-
-        if (!allowed)
+        if (!TicketStatus.CanTransition(ticket.Status, newStatus))
             throw new BusinessRuleException($"Invalid transition: {ticket.Status} -> {newStatus}.");
 
-        if (newStatus == "IN_PROGRESS" && string.IsNullOrWhiteSpace(dto.Diagnosis))
+        if (newStatus == TicketStatus.InProgress && string.IsNullOrWhiteSpace(dto.Diagnosis))
             throw new BusinessRuleException("A diagnosis is required to start work.");
 
-        if (newStatus == "RESOLVED" && string.IsNullOrWhiteSpace(dto.Resolution))
+        if (newStatus == TicketStatus.Resolved && string.IsNullOrWhiteSpace(dto.Resolution))
             throw new BusinessRuleException("A resolution is required to resolve the ticket.");
 
         return await _repository.ChangeStatusAsync(id, newStatus, dto.Diagnosis, dto.Resolution, dto.PerformedBy, dto.Comment);

@@ -1,0 +1,66 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.entry {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 0 18px 22px;
+  border-left: 2px solid var(--color-border);
+  margin-left: 6px;
+}
+
+.entry:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+
+.entry::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: -7px;
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-surface);
+  border-radius: 50%;
+  background: var(--color-brand);
+}
+
+.entryHeader {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+
+.eventType {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.date {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.statusChange {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-text-muted);
+}
+
+.comment {
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+
+.author {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}

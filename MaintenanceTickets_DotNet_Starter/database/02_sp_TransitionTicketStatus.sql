@@ -20,8 +20,7 @@ BEGIN
 
     IF NOT (
         (@OldStatus = 'PENDING' AND @NewStatus = 'IN_PROGRESS') OR
-        (@OldStatus = 'IN_PROGRESS' AND @NewStatus = 'RESOLVED') OR
-        (@OldStatus = 'RESOLVED' AND @NewStatus = 'CLOSED')
+        (@OldStatus = 'IN_PROGRESS' AND @NewStatus = 'RESOLVED')
     )
         THROW 50002, 'Invalid ticket status transition.', 1;
 

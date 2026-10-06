@@ -14,7 +14,7 @@ public class CreateTicketDto
     public string? Description { get; set; }
 
     [Required]
-    public string Priority { get; set; } = "MEDIUM";
+    public string Priority { get; set; } = string.Empty;
 
     [Required, MaxLength(100)]
     public string ReportedBy { get; set; } = string.Empty;

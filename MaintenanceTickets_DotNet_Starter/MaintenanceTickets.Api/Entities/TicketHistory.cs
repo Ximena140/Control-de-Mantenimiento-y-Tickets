@@ -1,5 +1,6 @@
 namespace MaintenanceTickets.Api.Entities;
 
+/// <summary>Event of a ticket. Each ticket has many history entries (FK TicketHistory.TicketId → Tickets.Id).</summary>
 public class TicketHistory
 {
     public long Id { get; set; }
@@ -10,6 +11,4 @@ public class TicketHistory
     public string? Comment { get; set; }
     public string PerformedBy { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
-
-    public Ticket? Ticket { get; set; }
 }

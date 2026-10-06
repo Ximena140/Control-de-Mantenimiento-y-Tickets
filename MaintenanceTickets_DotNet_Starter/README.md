@@ -101,9 +101,25 @@ Controller -> Service -> Repository -> SQL Server
 - SQL Server: persistence and stored procedure
 
 ## State machine
-PENDING -> IN_PROGRESS -> RESOLVED -> CLOSED
+PENDING -> IN_PROGRESS -> RESOLVED
 
+- New tickets start as PENDING, and a CREATED history entry is saved in the same transaction.
 - PENDING -> IN_PROGRESS requires a diagnosis.
 - IN_PROGRESS -> RESOLVED requires a resolution.
-- Invalid transitions are rejected.
-- The SQL stored procedure updates the ticket and inserts history in the same transaction.
+- Every transition requires `performedBy`; `comment` is optional.
+- Invalid transitions (for example PENDING -> RESOLVED) are rejected with `409 Conflict`.
+- The SQL stored procedure updates the ticket and inserts a STATUS_CHANGED history entry in the same transaction.
+- The allowed transitions are defined in `Entities/TicketStatus.cs` and mirrored by `sp_TransitionTicketStatus`.
+
+## Data model
+Ticket 1 ─── N TicketHistory (foreign key `TicketHistory.TicketId`).
+
+The entities have no navigation properties, so API responses never contain cycles. A ticket's history is read from GET `/api/tickets/{id}/history`.
+
+## Updating an existing database
+`01_schema.sql` drops and recreates the tables. To update an existing database without losing data, run `02_sp_TransitionTicketStatus.sql` and replace the status constraint:
+
+```sql
+ALTER TABLE dbo.Tickets DROP CONSTRAINT CK_Tickets_Status;
+ALTER TABLE dbo.Tickets ADD CONSTRAINT CK_Tickets_Status CHECK (Status IN ('PENDING','IN_PROGRESS','RESOLVED'));
+```

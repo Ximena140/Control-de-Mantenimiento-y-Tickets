@@ -30,8 +30,9 @@ public class AppDbContext : DbContext
             entity.Property(x => x.EventType).HasMaxLength(30).IsRequired();
             entity.Property(x => x.PerformedBy).HasMaxLength(100).IsRequired();
 
-            entity.HasOne(x => x.Ticket)
-                .WithMany(x => x.History)
+            // Ticket 1 ─── N TicketHistory, without navigation properties so API responses have no cycles.
+            entity.HasOne<Ticket>()
+                .WithMany()
                 .HasForeignKey(x => x.TicketId)
                 .OnDelete(DeleteBehavior.Restrict);
         });

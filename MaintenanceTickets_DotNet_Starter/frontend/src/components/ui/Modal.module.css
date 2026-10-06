@@ -1,0 +1,56 @@
+.dialog {
+  width: min(100% - 32px, 520px);
+  max-height: min(100% - 32px, 760px);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-large);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-dialog);
+}
+
+.large {
+  width: min(100% - 32px, 680px);
+}
+
+.dialog::backdrop {
+  background: rgb(16 35 63 / 45%);
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px 12px;
+  background: var(--color-surface);
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-brand);
+}
+
+.closeButton {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: var(--radius-small);
+}
+
+.closeButton:hover {
+  background: var(--color-background);
+  color: var(--color-text);
+}
+
+.body {
+  padding: 4px 22px 22px;
+}

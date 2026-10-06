@@ -1,0 +1,65 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 0.85rem;
+  color: var(--color-text);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.75rem;
+}
+
+.error {
+  color: var(--tone-danger-text);
+}
+
+.counter,
+.counterExceeded {
+  flex-shrink: 0;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.counterExceeded {
+  color: var(--tone-danger-text);
+  font-weight: 600;
+}
+
+/* Shared look for every control rendered inside a FormField. */
+.control {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-background);
+  font-size: 0.95rem;
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+.control::placeholder {
+  color: #a3abb8;
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 0;
+  border-color: var(--color-focus);
+  background: var(--color-surface);
+}
+
+.control[aria-invalid='true'] {
+  border-color: var(--tone-danger-text);
+  background: var(--color-surface);
+}
+
+textarea.control {
+  resize: vertical;
+  min-height: 72px;
+}

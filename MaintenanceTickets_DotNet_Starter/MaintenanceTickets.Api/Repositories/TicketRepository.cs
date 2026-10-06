@@ -19,33 +19,30 @@ public class TicketRepository : ITicketRepository
     public Task<Ticket?> GetByIdAsync(int id) =>
         _context.Tickets.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
-    public async Task<Ticket> CreateAsync(Ticket ticket, string performedBy)
+    /// <summary>
+    /// Inserts the ticket and its CREATED history entry in one transaction.
+    /// If anything fails before the commit, disposing the transaction rolls it back.
+    /// </summary>
+    public async Task<Ticket> CreateAsync(Ticket ticket)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
-        try
-        {
-            _context.Tickets.Add(ticket);
-            await _context.SaveChangesAsync();
 
-            _context.TicketHistory.Add(new TicketHistory
-            {
-                TicketId = ticket.Id,
-                EventType = "CREATED",
-                ToStatus = "PENDING",
-                Comment = "Ticket created",
-                PerformedBy = performedBy,
-                CreatedAt = DateTime.UtcNow
-            });
+        _context.Tickets.Add(ticket);
+        await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-            return ticket;
-        }
-        catch
+        _context.TicketHistory.Add(new TicketHistory
         {
-            await transaction.RollbackAsync();
-            throw;
-        }
+            TicketId = ticket.Id,
+            EventType = HistoryEventType.Created,
+            ToStatus = ticket.Status,
+            Comment = "Ticket created",
+            PerformedBy = ticket.ReportedBy,
+            CreatedAt = DateTime.UtcNow
+        });
+        await _context.SaveChangesAsync();
+
+        await transaction.CommitAsync();
+        return ticket;
     }
 
     public async Task<Ticket?> ChangeStatusAsync(int id, string newStatus, string? diagnosis, string? resolution, string performedBy, string? comment)

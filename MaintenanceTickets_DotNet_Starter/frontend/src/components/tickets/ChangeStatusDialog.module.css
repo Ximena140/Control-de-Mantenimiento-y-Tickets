@@ -1,0 +1,39 @@
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: var(--radius-medium);
+  background: var(--color-background);
+}
+
+.ticketName {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.ticketNumber {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.transition {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
