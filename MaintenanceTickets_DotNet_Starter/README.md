@@ -136,3 +136,6 @@ The app is deployed on Railway as three services:
 - **API**: built from `MaintenanceTickets.Api/Dockerfile`. The connection string is set with the `ConnectionStrings__DefaultConnection` environment variable.
 - **Frontend**: built from `frontend/Dockerfile`. The API URL is set at build time with `VITE_API_BASE_URL`.
 - **Database**: SQL Server container, initialized with the scripts in `database/`.
+
+## AI-assisted development
+See [PROMPTS.md](PROMPTS.md) for the prompts used to build the frontend.
