@@ -125,4 +125,14 @@ ALTER TABLE dbo.Tickets ADD CONSTRAINT CK_Tickets_Status CHECK (Status IN ('PEND
 ```
 
 ## Deployment
-See [DEPLOYMENT.md](DEPLOYMENT.md) for deploying the database, API and frontend on Railway.
+The app is deployed on Railway as three services:
+
+| Service | URL |
+|---|---|
+| Frontend | https://handsome-gentleness-production-1ad9.up.railway.app |
+| API (Swagger) | https://control-de-mantenimiento-y-tickets-production.up.railway.app/swagger |
+| SQL Server | Private, reachable only by the API |
+
+- **API**: built from `MaintenanceTickets.Api/Dockerfile`. The connection string is set with the `ConnectionStrings__DefaultConnection` environment variable.
+- **Frontend**: built from `frontend/Dockerfile`. The API URL is set at build time with `VITE_API_BASE_URL`.
+- **Database**: SQL Server container, initialized with the scripts in `database/`.

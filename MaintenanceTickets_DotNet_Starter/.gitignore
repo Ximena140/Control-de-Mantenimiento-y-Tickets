@@ -4,3 +4,7 @@
 *.user
 *.suo
 appsettings.Development.json
+
+# Local-only documentation
+/DEPLOYMENT.md
+/FRONTEND_PLAN.md
