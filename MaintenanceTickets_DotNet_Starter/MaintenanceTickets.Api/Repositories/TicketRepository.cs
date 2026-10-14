@@ -19,10 +19,7 @@ public class TicketRepository : ITicketRepository
     public Task<Ticket?> GetByIdAsync(int id) =>
         _context.Tickets.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
-    /// <summary>
-    /// Inserts the ticket and its CREATED history entry in one transaction.
-    /// If anything fails before the commit, disposing the transaction rolls it back.
-    /// </summary>
+    
     public async Task<Ticket> CreateAsync(Ticket ticket)
     {
         await using var transaction = await _context.Database.BeginTransactionAsync();
